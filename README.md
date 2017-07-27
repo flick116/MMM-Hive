@@ -18,6 +18,7 @@ WIP
 | `initialLoadDelay`           | The initial delay before loading (Milliseconds) <br><br>**Type:** `integer`<br>**Possible values:** `1000` - `5000` <br> **Default value:**  `0`|
 
 Example of the config.js entry:
+
 ```
 		{
 			module: "MMM-Hive",
@@ -31,4 +32,8 @@ Example of the config.js entry:
 				showNext: true,
 			},
 		},
-    ```
+```
+## A massive thanks to the following:
+- [Graham White](https://github.com/grahamwhiteuk/) for the [bg-hive-api-v6](https://github.com/grahamwhiteuk/bg-hive-api-v6) api, which I used as reference
+- [Michael Teeuw](https://github.com/MichMich) for the awesome [MagicMirror2](https://github.com/MichMich/MagicMirror/)
+- [James Saunders](http://www.smartofthehome.com/2016/05/hive-rest-api-v6/) for the very detailed breakdown of the Hive api v6
