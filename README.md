@@ -6,6 +6,9 @@ Text and the inside icon are configurable, and the thermometer icon is dynamic.
 ![](hive.png)
 ![](hive2.png)
 
+With configuration changes to text and icon:<br><br>
+![](hive3.png)
+
 ## Installation
 WIP
 
