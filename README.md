@@ -38,3 +38,4 @@ Example of the config.js entry:
 - [Graham White](https://github.com/grahamwhiteuk/) for the [bg-hive-api-v6](https://github.com/grahamwhiteuk/bg-hive-api-v6) api, which I used as reference
 - [Michael Teeuw](https://github.com/MichMich) for the awesome [MagicMirror2](https://github.com/MichMich/MagicMirror/)
 - [James Saunders](http://www.smartofthehome.com/2016/05/hive-rest-api-v6/) for the very detailed breakdown of the Hive api v6
+- [Stefan](https://forum.magicmirror.builders/user/yawns) for this [post](https://forum.magicmirror.builders/topic/1949/display-values-from-a-json-file-hosted-online/2), which helped me with working out how to pull back the correct JSON values
