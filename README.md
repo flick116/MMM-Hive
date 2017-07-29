@@ -41,10 +41,10 @@ git clone https://github.com/flick116/MMM-Hive
 |`outsideText` | No | Option to change the default 'Outside:' text<br><br>**Type:** `string`|
 |`targetTempText` | No | Whether to display the Target Temperature row (true) or not (false)<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
 |`insideIconSet` | No | Option to change the default 'fire' icon, can change to any of the available icons at<br>[font awesome](http://fontawesome.io/icons/)<br><br>**Type:** `string`<br>**Possible values:** `fa fa-fire` <br> **Default value:** `fa fa-home`|
-|`highestTemp` | No | Set the highest temperature value, which when reached will use the full thermometer icon, plus turn the icon red<br><br>**Type:** `integer`<br> **Default value:** `30`|
-|`highTemp` | No | Set the high temperature value, which when reached will use the three quarters full thermometer icon<br><br>**Type:** `integer`<br> **Default value:** `30`|
-|`lowTemp` | No | Set the low temperature value, which when reached will use the half full thermometer icon<br><br>**Type:** `integer`<br> **Default value:** `30`|
-|`lowestTemp` | No | Set the lowest temperature value, which when reached will use the quarter full thermometer icon<br>(anything below this temperature will use the empty thermometer icon)<br><br>**Type:** `integer`<br> **Default value:** `30`|
+|`highestTemp` | No | Set the highest temperature value, which when reached will use the 'full thermometer' icon, plus turn the icon red<br><br>**Type:** `integer`<br> **Default value:** `30`|
+|`highTemp` | No | Set the high temperature value, which when reached will use the 'three quarters full thermometer' icon<br><br>**Type:** `integer`<br> **Default value:** `25`|
+|`lowTemp` | No | Set the low temperature value, which when reached will use the 'half full thermometer' icon<br><br>**Type:** `integer`<br> **Default value:** `20`|
+|`lowestTemp` | No | Set the lowest temperature value, which when reached will use the 'quarter full thermometer' icon<br>(anything below this temperature will use the 'empty thermometer' icon)<br><br>**Type:** `integer`<br> **Default value:** `15`|
 |`animatedLoading` | No | Whether to display the animated loading icon (true) or just plain text (false)<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
 |`debug` | No | Whether debug is enabled (true) or note (false).  When enabled responses from<br>Hive are output to the console<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
 
