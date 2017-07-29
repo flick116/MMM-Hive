@@ -3,16 +3,16 @@ A module for the [MagicMirror project](https://github.com/MichMich/MagicMirror) 
 
 Text and the inside icon are configurable, and the thermometer icon is dynamic based on the temperature values set in the config file.
 
-![](hive1.png)
-![](hive2.png)
-![](hive3.png)
+![](images/hive1.png)
+![](images/hive2.png)
+![](images/hive3.png)
 
 With configuration changes to the text and icon:<br><br>
-![](hive4.png)
+![](images/hive4.png)
 
 Target Temperature will change when the inside temperature is equal to / less than 1 °C (I am using this to detect whether Frost Protect mode is enabled as I do not believe there is a specific on/off value).
 
-![](hive5.png)
+![](images/hive5.png)
 
 ## Installation
 
