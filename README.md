@@ -20,6 +20,9 @@ Clone this repository in your `~/MagicMirror/modules/` folder `( $ cd ~MagicMirr
 ```
 git clone https://github.com/flick116/MMM-Hive
 ```
+## Dependencies
+
+[request](https://www.npmjs.com/package/request)
 
 ## Config
 
