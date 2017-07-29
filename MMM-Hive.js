@@ -40,10 +40,6 @@ Module.register('MMM-Hive',{
 					  }
 				},
 
-	//getScripts: function() {
-		//return ["moment.js", "https://code.jquery.com/jquery-2.2.3.min.js"];
-	//},
-
 	getStyles: function() {
 		return ["MMM-Hive.css","font-awesome.css"];
 	},
