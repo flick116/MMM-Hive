@@ -1,16 +1,25 @@
 # MMM-Hive
 A module for the [MagicMirror project](https://github.com/MichMich/MagicMirror) to display inside / outside temperature from your Hive receiver.
 
-Text and the inside icon are configurable, and the thermometer icon is dynamic.
+Text and the inside icon are configurable, and the thermometer icon is dynamic based on the temperature values set in the config file.
 
-![](hive.png)
+![](hive1.png)
 ![](hive2.png)
-
-With configuration changes to text and icon:<br><br>
 ![](hive3.png)
 
+With configuration changes to the text and icon:<br><br>
+![](hive4.png)
+
+Target Temperature will change when the inside temperature is equal to / less than 1 °C (I am using this to detect whether Frost Protect mode is enabled as I do not believe there is a specific on/off value).
+
+![](hive5.png)
+
 ## Installation
-WIP
+
+Clone this repository in your `~/MagicMirror/modules/` folder `( $ cd ~MagicMirror/modules/ )`:
+```
+git clone https://github.com/flick116/MMM-Hive
+```
 
 ## Config
 
@@ -28,12 +37,13 @@ WIP
 |`insideText` | No | Option to change the default 'Inside:' text<br><br>**Type:** `string`|
 |`outsideText` | No | Option to change the default 'Outside:' text<br><br>**Type:** `string`|
 |`targetTempText` | No | Whether to display the Target Temperature row (true) or not (false)<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
-|`insideIconSet` | No | Option to change the default 'fire' icon, can change to any of the available icons at<br>[font awesome](http://fontawesome.io/icons/)<br><br>**Type:** `string`<br>**Possible values:** fa fa-home <br> **Default value:** `fa fa-fire`|
+|`insideIconSet` | No | Option to change the default 'fire' icon, can change to any of the available icons at<br>[font awesome](http://fontawesome.io/icons/)<br><br>**Type:** `string`<br>**Possible values:** `fa fa-fire` <br> **Default value:** `fa fa-home`|
 |`highestTemp` | No | Set the highest temperature value, which when reached will use the full thermometer icon, plus turn the icon red<br><br>**Type:** `integer`<br> **Default value:** `30`|
 |`highTemp` | No | Set the high temperature value, which when reached will use the three quarters full thermometer icon<br><br>**Type:** `integer`<br> **Default value:** `30`|
 |`lowTemp` | No | Set the low temperature value, which when reached will use the half full thermometer icon<br><br>**Type:** `integer`<br> **Default value:** `30`|
 |`lowestTemp` | No | Set the lowest temperature value, which when reached will use the quarter full thermometer icon<br>(anything below this temperature will use the empty thermometer icon)<br><br>**Type:** `integer`<br> **Default value:** `30`|
 |`animatedLoading` | No | Whether to display the animated loading icon (true) or just plain text (false)<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
+|`debug` | No | Whether debug is enabled (true) or note (false).  When enabled responses from<br>Hive are output to the console<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
 
 Example of the config.js entry:
 
