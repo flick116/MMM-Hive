@@ -42,14 +42,19 @@ module.exports = NodeHelper.create({
 			url: oUrl + myPostcode,
 			method: 'GET',
 		}, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				self.sendSocketNotification("OUTSIDE", body);
-			}
-			else if (response.statusCode == 400) {
-				self.sendSocketNotification("POSTCODE_ERROR", "Postcode missing or incorrect: " + response.statusCode + " Body: " + body);
-			}
+			if (response && response.statusCode) {
+				if (!error && response.statusCode == 200) {
+					self.sendSocketNotification("OUTSIDE", body);
+					}
+				else if (response.statusCode == 400) {
+					self.sendSocketNotification("POSTCODE_ERROR", "Postcode missing or incorrect: " + response.statusCode + " Body: " + body);
+					}
+				else {
+					self.sendSocketNotification("OUTSIDE_ERROR", "Error in request for Outside temperature with status code: " + response.statusCode + " Body: " + body);
+					}
+				}
 			else {
-				self.sendSocketNotification("OUTSIDE_ERROR", "Error in request for Outside temperature with status code: " + response.statusCode + " Body: " + body);
+			self.sendSocketNotification("UNKNOWN_ERROR", "Error found within get postcode data: " + response + " Body: " + body);
 			}
 		});
 
@@ -59,17 +64,22 @@ module.exports = NodeHelper.create({
 			method: "POST",
 			body: JSON.stringify(body),
 		}, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				var responseJson = JSON.parse(body);
-				sessionID = responseJson.sessions[0].sessionId;
+			if (response && response.statusCode) {
+				if (!error && response.statusCode == 200) {
+					var responseJson = JSON.parse(body);
+					sessionID = responseJson.sessions[0].sessionId;
+				}
+				else if (response.statusCode == 400) {
+					self.sendSocketNotification("400_ERROR", "Authorisation error username / password missing or incorrect: " + response.statusCode + " Body: " + body);
+				}
+				else {
+					self.sendSocketNotification("INSIDE_ERROR", "Error in login request for Inside temperature with status code: " + response.statusCode + " Body: " + body);
+					}
+				}
+			else {
+			self.sendSocketNotification("UNKNOWN_ERROR", "Unknown error within /auth/sessions has occurred: " + response + " Body: " + body);
 			}
-			else if (response.statusCode == 400) {
-				self.sendSocketNotification("400_ERROR", "Authorisation error username / password missing or incorrect: " + response.statusCode + " Body: " + body);
-			}
-		else {
-				self.sendSocketNotification("INSIDE_ERROR", "Error in login request for Inside temperature with status code: " + response.statusCode + " Body: " + body);
-			}
-					request({
+			request({
 			url: iUrl + "/nodes",
 			headers: {
 					'Content-Type': 'application/vnd.alertme.zoo-6.1+json',
@@ -79,22 +89,28 @@ module.exports = NodeHelper.create({
 					'X-Omnia-Access-Token': sessionID,
 					 },
 			method: "GET",
-		}, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				self.sendSocketNotification("INSIDE", body);
-				var responseJson = JSON.parse(body);
-			}
-			else if (response.statusCode == 401) {
-				self.sendSocketNotification("401_ERROR", "Authorisation error username / password missing or incorrect: " + response.statusCode + " Body: " + body);
-			}
-		else {
-				self.sendSocketNotification("INSIDE_ERROR", "Error in devices request for Inside temperature with status code: " + response.statusCode + " Body: " + body);
-			}
-		})
-		});
+			}, function (error, response, body) {
+			//
+				if (response && response.statusCode) {
+					if (!error && response.statusCode == 200) {
+						self.sendSocketNotification("INSIDE", body);
+						var responseJson = JSON.parse(body);
+						}
+					else if (response.statusCode == 401) {
+						self.sendSocketNotification("401_ERROR", "Authorisation error username / password missing or incorrect: " + response.statusCode + " Body: " + body);
+						}
+					else {
+						self.sendSocketNotification("INSIDE_ERROR", "Error in devices request for Inside temperature with status code: " + response.statusCode + " Body: " + body);
+						}
+					}
+				else {
+				self.sendSocketNotification("UNKNOWN_ERROR", "Unknown error within /nodes has occurred: " + response + " Body: " + body);
+					}
+				})
+				});
 		
 		setTimeout(function() { self.getData(); }, this.config.refreshInterval);
-	},
+		},
 	
 	socketNotificationReceived: function(notification, payload) {
 		if (notification === 'CONFIG') {

@@ -219,9 +219,11 @@ Module.register('MMM-Hive',{
 	}, 
 	
 	socketNotificationReceived: function(notification, payload) {
+		var dt = new Date();
+		var utcDate = dt.toUTCString();
 		if (notification === "INSIDE") {
 			if (this.config.debug == true) {
-				Log.log(this.name + " received notification: " + notification + " - Payload: " + payload);
+				Log.log(utcDate + " " + this.name + " received notification: " + notification);
 				this.processData("INSIDE", JSON.parse(payload));
 				this.updateDom(this.config.animationSpeed);
 				this.loaded = true;
@@ -238,7 +240,7 @@ Module.register('MMM-Hive',{
 			}
 		else if (notification === "OUTSIDE") {
 			if (this.config.debug == true) {
-				Log.log(this.name + " received notification: " + notification + " - Payload: " + payload);
+				Log.log(utcDate + " " + this.name + " received notification: " + notification + " - Payload: " + payload);
 				this.processData("OUTSIDE", JSON.parse("[" + payload + "]"));
 				this.updateDom(this.config.animationSpeed);
 				this.loaded = true;
@@ -255,7 +257,7 @@ Module.register('MMM-Hive',{
 			}
 		else if (notification === "401_ERROR" || notification === "400_ERROR") {
 			if (this.config.debug == true) {
-				Log.log(this.name + " received notification: " + notification + " - Payload: " + payload);
+				Log.log(utcDate + " " + this.name + " received notification: " + notification + " - Payload: " + payload);
 				this.updateDom(this.config.animationSpeed);
 				this.loaded = true;
 				this.error = false;
@@ -270,7 +272,7 @@ Module.register('MMM-Hive',{
 			}
 		else if (notification === "POSTCODE_ERROR") {
 			if (this.config.debug == true) {
-				Log.log(this.name + " received notification: " + notification + " - Payload: " + payload);
+				Log.log(utcDate + " " + this.name + " received notification: " + notification + " - Payload: " + payload);
 				this.updateDom(this.config.animationSpeed);
 				this.loaded = true;
 				this.error = false;
@@ -287,7 +289,28 @@ Module.register('MMM-Hive',{
 			}
 		else if (notification === "INSIDE_ERROR" || notification === "OUTSIDE_ERROR") {
 			if (this.config.debug == true) {
-				Log.log(this.name + " received notification: " + notification + " - Payload: " + payload);
+				Log.log(utcDate + " " + this.name + " received notification: " + notification + " - Payload: " + payload);
+				clearInterval(this.dataID);
+				this.dataID = null;
+				this.updateDom(this.config.animationSpeed);
+				this.dataTimer();
+				this.loaded = true;
+				this.error = true;
+				this.error401 = false;
+				}
+			else {
+				clearInterval(this.dataID);
+				this.dataID = null;
+				this.updateDom(this.config.animationSpeed);
+				this.dataTimer();
+				this.loaded = true;
+				this.error = true;
+				this.error401 = false;
+				}
+			}
+		else if (notification === "UNKNOWN_ERROR") {
+			if (this.config.debug == true) {
+				Log.log(utcDate + " " + this.name + " received notification: " + notification + " - Payload: " + payload);
 				clearInterval(this.dataID);
 				this.dataID = null;
 				this.updateDom(this.config.animationSpeed);
