@@ -223,7 +223,7 @@ Module.register('MMM-Hive',{
 		var utcDate = dt.toUTCString();
 		if (notification === "INSIDE") {
 			if (this.config.debug == true) {
-				Log.log(utcDate + " " + this.name + " received notification: " + notification);
+				Log.log(utcDate + " " + this.name + " received notification: " + notification + " - Payload: " + payload);
 				this.processData("INSIDE", JSON.parse(payload));
 				this.updateDom(this.config.animationSpeed);
 				this.loaded = true;
