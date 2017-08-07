@@ -46,6 +46,7 @@ git clone https://github.com/flick116/MMM-Hive
 |`lowTemp` | No | Set the low temperature value, which when reached will use the 'half full thermometer' icon<br><br>**Type:** `integer`<br> **Default value:** `20`|
 |`lowestTemp` | No | Set the lowest temperature value, which when reached will use the 'quarter full thermometer' icon<br>(anything below this temperature will use the 'empty thermometer' icon)<br><br>**Type:** `integer`<br> **Default value:** `15`|
 |`animatedLoading` | No | Whether to display the animated loading icon (true) or just plain text (false)<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
+|`nodeName` | No | In case of a multi-node setup, you will need to define this setting. If the inside temperature is not being<br>reported then set this to either `Receiver` or `Receiver 2`<br><br>**Type:** `string`<br>**Default value:** `Your Receiver`|
 |`debug` | No | Whether debug is enabled (true) or note (false).  When enabled responses from<br>Hive are output to the console<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
 
 Example of the config.js entry:
