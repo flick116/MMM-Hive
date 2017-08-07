@@ -29,6 +29,7 @@ Module.register('MMM-Hive',{
 		lowestTemp: '15',
 		animatedLoading: true,
 		temperatureSuffix: '°C',
+		nodeName: 'Your Receiver',
 		outsideUrl: 'https://weather-prod.bgchprod.info/weather?postcode=',
 		insideUrl: 'https://api-prod.bgchprod.info:443/omnia',
 		debug: false,
@@ -77,7 +78,7 @@ Module.register('MMM-Hive',{
 		
 		if (FLAG === "INSIDE"){
 			for (var i=0; i<result.nodes.length; i++) {
-				if (result.nodes[i].name === "Your Receiver" && result.nodes[i].attributes.stateHeatingRelay) {
+				if (result.nodes[i].name === this.config.nodeName && result.nodes[i].attributes.stateHeatingRelay) {
 
 				var insideTemp = result.nodes[i].attributes.temperature.reportedValue;				
 					this.insideT = insideTemp;
