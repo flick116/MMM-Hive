@@ -21,28 +21,34 @@ Module.register('MMM-Hive',{
 		insideText: 'Inside:',
 		outsideText: 'Outside:',
 		targetTempText: 'Target Temperature:',
+		hotWaterText: 'Hot Water:',
+		thermBattText: 'Thermostat Battery:',
 		insideIconSet: 'fa fa-home',
+		hBoostOffText: 'Not Active',
+		hwBoostOffText: 'Off',
+		boostRow: true,
 		showNext: true,
+		showHotWater: true,
+		showBattery: true,
+		batteryIcon: true,
 		highestTemp: '30',
 		highTemp: '25',
 		lowTemp: '20',
 		lowestTemp: '15',
 		animatedLoading: true,
 		temperatureSuffix: '°C',
-		nodeName: 'Your Receiver',
-		outsideUrl: 'https://weather-prod.bgchprod.info/weather?postcode=',
-		insideUrl: 'https://api-prod.bgchprod.info:443/omnia',
+		nodeName: 'heating',
+		outsideUrl: 'http://weather-prod.bgchprod.info/weather?postcode=',
+		insideUrl: 'https://beekeeper-uk.hivehome.com:443/1.0',
+		loginUrl: 'https://beekeeper.hivehome.com:443/1.0',
 		debug: false,
 		hiveHeaders: {
-						'Content-Type': 'application/vnd.alertme.zoo-6.1+json',
-						'Accept': 'application/vnd.alertme.zoo-6.1+json',
-						'X-Omnia-Client': 'Hive Web Dashboard',
-						'cache-control': "no-cache",
+						'Content-Type': 'application/json',
 					  }
 				},
 
 	getStyles: function() {
-		return ["MMM-Hive.css","font-awesome.css"];
+		return ["font-awesome.css","MMM-Hive.css"];
 	},
 
 	start: function() {
@@ -53,6 +59,10 @@ Module.register('MMM-Hive',{
 		this.insideT = null;
 		this.insideS = null;
 		this.insideTarget = null;
+		this.hotStateT = null;
+		this.batteryT = null;
+		this.hwBoost = null;
+		this.hBoost = null;
 
 		this.loaded = false;
         this.error = false;
@@ -77,20 +87,38 @@ Module.register('MMM-Hive',{
         this.loaded = true;
 		
 		if (FLAG === "INSIDE"){
-			for (var i=0; i<result.nodes.length; i++) {
-				if (result.nodes[i].name === this.config.nodeName && result.nodes[i].attributes.stateHeatingRelay) {
-
-				var insideTemp = result.nodes[i].attributes.temperature.reportedValue;				
+			for (var i=0; i<result.length; i++) {
+				if (result[i].type === this.config.nodeName) {
+				var insideTemp = result[i].props.temperature;				
 					this.insideT = insideTemp;
-				var heatingState = result.nodes[i].attributes.stateHeatingRelay.reportedValue || "unknown";
+				var heatingState = result[i].state.status || "unknown";
 					this.insideS = heatingState;
-				var heatingTarget = targetHeatTemperature = result.nodes[i].attributes.targetHeatTemperature.reportedValue || "unknown";
+				var heatingBoost = result[i].state.boost || this.config.hBoostOffText;
+					this.hBoost = heatingBoost;
+				var heatingTarget = targetHeatTemperature = result[i].state.target || "unknown";
 					this.insideTarget = heatingTarget
+					//var hotState = result[1].state.status;
+					//this.hotStateT = hotState
 				}
-		}}
-
+								
+				if (result[i].type === 'hotwater') {
+					var hotState = result[i].state.status;
+					this.hotStateT = hotState
+					var hotWaterBoost = result[i].state.boost || this.config.hwBoostOffText;
+					this.hwBoost = hotWaterBoost;
+				}
+				}}
+				
+		else if (FLAG === "DEVICES"){
+					for (var i=0; i<result.length; i++) {
+						if (result[i].type === 'thermostatui') {
+						var battery = result[i].props.battery;				
+							this.batteryT = battery;
+						}}
+						}
+				
 		else if (FLAG === "OUTSIDE"){
-		var outsideTemp = result[0].weather.temperature.value;
+					var outsideTemp = result[0].weather.temperature.value;
 					this.outsideT = outsideTemp;
 					}
 				},
@@ -123,14 +151,15 @@ Module.register('MMM-Hive',{
 			}
         }
 		
-        if (this.error) {
-            information.innerHTML = "Error loading data";
-			information.className = "light small";
-            return information;
-        }
+        // if (this.error) {
+            // information.innerHTML = "Error loading data";
+			// information.className = "light small";
+            // return information;
+        // }
 		
 		var table = document.createElement("table");
 		
+		//heating
 		var temperatureRow = document.createElement("tr");
 		
 		var outsideIcon = document.createElement("td");
@@ -174,12 +203,14 @@ Module.register('MMM-Hive',{
 		
 		var onOffIcon = document.createElement("td");
 		
-		if (this.insideS == "OFF") {
+		//if (this.insideS == "OFF") {
+		if (this.insideT >= this.insideTarget) {
         onOffIcon.setAttribute("aria-hidden","true");
 		onOffIcon.className = this.config.insideIconSet + " small dimmed";
 			temperatureRow.appendChild(onOffIcon);
 		}
-		else if (this.insideS == "ON") {
+		//else if (this.insideS == "ON") {
+		else if (this.insideT < this.insideTarget) {
         onOffIcon.setAttribute("aria-hidden","true");
 		onOffIcon.className = this.config.insideIconSet + " small";
 		onOffIcon.style.cssText="color:red;"; 
@@ -191,7 +222,75 @@ Module.register('MMM-Hive',{
 		insideCell.className = "light small";
 		insideCell.style.cssText="color:white;";
 		temperatureRow.appendChild(insideCell);
-			
+		
+		if (this.config.batteryIcon == true) {
+		var battIcon = document.createElement("td");
+		
+		if (this.batteryT >= 95) {
+        battIcon.setAttribute("aria-hidden","true");
+		battIcon.className = "fa fa-battery-full fa-rotate-270 xsmall dimmed";
+			temperatureRow.appendChild(battIcon);
+		}
+		else if (this.batteryT <= 5) {
+        battIcon.setAttribute("aria-hidden","true");
+		battIcon.className = "fa fa-battery-empty fa-rotate-270 xsmall dimmed";
+		battIcon.style.cssText="color:red;"; 
+			temperatureRow.appendChild(battIcon);
+		}
+		else if (this.batteryT <= 25) {
+        battIcon.setAttribute("aria-hidden","true");
+		battIcon.className = "fa fa-battery-quarter fa-rotate-270 xsmall dimmed";
+			temperatureRow.appendChild(battIcon);
+		}
+		else if (this.batteryT <= 50) {
+        battIcon.setAttribute("aria-hidden","true");
+		battIcon.className = "fa fa-battery-half fa-rotate-270 xsmall dimmed";
+			temperatureRow.appendChild(battIcon);
+		}
+		else if (this.batteryT <= 94) {
+        battIcon.setAttribute("aria-hidden","true");
+		battIcon.className = "fa fa-battery-three-quarters fa-rotate-270 xsmall dimmed";
+			temperatureRow.appendChild(battIcon);
+		}
+		}
+		//
+		
+		//heating end
+		
+		//hotwater
+		var hotWaterRow = document.createElement("tr");
+		if (this.config.showHotWater == true && this.config.showBattery == false) {
+		var hotWaterCell = document.createElement("td");
+		hotWaterCell.colSpan = 5;
+				hotWaterCell.innerHTML = this.config.hotWaterText + " " + this.hotStateT;
+			if (this.hotStateT == "ON") {
+				hotWaterCell.style.cssText="color:red;";
+				hotWaterCell.className = "light xsmall";}
+			else if (this.hotStateT == "OFF") {
+				hotWaterCell.className = "light xsmall";}
+				hotWaterRow.appendChild(hotWaterCell);
+		}
+		else if (this.config.showHotWater == true && this.config.showBattery == true) {
+		var hotWaterCell = document.createElement("td");
+		hotWaterCell.colSpan = 5;
+				hotWaterCell.innerHTML = this.config.hotWaterText + " " + this.hotStateT + " || " + this.config.thermBattText + " " + this.batteryT + "%";
+			if (this.hotStateT == "ON") {
+				hotWaterCell.style.cssText="color:red;";
+				hotWaterCell.className = "light xsmall";}
+			else if (this.hotStateT == "OFF") {
+				hotWaterCell.className = "light xsmall";}
+				hotWaterRow.appendChild(hotWaterCell);
+		}
+		else if (this.config.showHotWater == false && this.config.showBattery == true) {
+		var hotWaterCell = document.createElement("td");
+		hotWaterCell.colSpan = 5;
+				hotWaterCell.innerHTML = this.config.thermBattText + " " + this.batteryT + "%";
+				hotWaterCell.className = "light xsmall";
+				hotWaterRow.appendChild(hotWaterCell);
+		}
+		//hotwater end
+		
+		//target temp
 		var targetTemperatureRow = document.createElement("tr");
 		if (this.config.showNext == true) {
 		var targetTemperatureCell = document.createElement("td");
@@ -212,9 +311,44 @@ Module.register('MMM-Hive',{
 				targetTemperatureCell.className = "light xsmall";
 				targetTemperatureRow.appendChild(targetTemperatureCell);
 				}}
+			//target temp end
+			
+		//boost row
+		var boostRow = document.createElement("tr");
+		if (this.config.boostRow == true) {
+		var hboostCell = document.createElement("td");
+		hboostCell.colSpan = 3;
+			if (this.hBoost == this.config.hwBoostOffText) {
+		hboostCell.innerHTML = "H Boost: " + this.hBoost;
+		hboostCell.className = "light xsmall";
+		boostRow.appendChild(hboostCell);
+			}
+		else {
+		hboostCell.innerHTML = "H Boost - Time: " + this.hBoost;
+		hboostCell.className = "light xsmall";
+		hboostCell.style.cssText="color:red;";
+		boostRow.appendChild(hboostCell);
+			}
+		var hwboostCell = document.createElement("td");
+		hwboostCell.colSpan = 3;
+			if (this.hwBoost == this.config.hwBoostOffText) {
+		hwboostCell.innerHTML = "HW Boost: " + this.hwBoost;
+		hwboostCell.className = "light xsmall";
+		boostRow.appendChild(hwboostCell);
+			}
+		else {
+		hwboostCell.innerHTML = "HW Boost - Time: " + this.hwBoost;
+		hwboostCell.className = "light xsmall";
+		hwboostCell.style.cssText="color:red;";
+		boostRow.appendChild(hwboostCell);
+			}
+		}
+			//boost row end
 
 		table.appendChild(temperatureRow);
 		table.appendChild(targetTemperatureRow);
+		table.appendChild(hotWaterRow);
+		table.appendChild(boostRow);
 				
 		return table;
 	}, 
@@ -239,6 +373,25 @@ Module.register('MMM-Hive',{
 				this.error401 = false;
 				}
 			}
+			//testing
+		else if (notification === "DEVICES") {
+			if (this.config.debug == true) {
+				Log.log(utcDate + " " + this.name + " received notification: " + notification + " - Payload: " + payload);
+				this.processData("DEVICES", JSON.parse(payload));
+				this.updateDom(this.config.animationSpeed);
+				this.loaded = true;
+				this.error = false;
+				this.error401 = false;
+				}
+			else {
+				this.processData("DEVICES", JSON.parse(payload));
+				this.updateDom(this.config.animationSpeed);
+				this.loaded = true;
+				this.error = false;
+				this.error401 = false;
+				}
+			}
+			//testing end
 		else if (notification === "OUTSIDE") {
 			if (this.config.debug == true) {
 				Log.log(utcDate + " " + this.name + " received notification: " + notification + " - Payload: " + payload);

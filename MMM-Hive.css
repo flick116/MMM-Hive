@@ -3,3 +3,28 @@ td {
 	text-align: left;
 	vertical-align: top;
 }
+
+.fa-battery-empty {
+	font-size: 15px;
+	vertical-align: text-top;
+}
+
+.fa-battery-quarter {
+	font-size: 15px;
+	vertical-align: text-top;
+}
+
+.fa-battery-half {
+	font-size: 15px;
+	vertical-align: text-top;
+}
+
+.fa-battery-three-quarters {
+	font-size: 15px;
+	vertical-align: text-top;
+}
+
+.fa-battery-full {
+	font-size: 15px;
+	vertical-align: text-top;
+}

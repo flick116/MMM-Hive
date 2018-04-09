@@ -24,6 +24,7 @@ module.exports = NodeHelper.create({
 		
 		var oUrl = this.config.outsideUrl;
 		var iUrl = this.config.insideUrl;
+		var lUrl = this.config.loginUrl;
 		var myPostcode = this.config.postcode;
 		var myHiveUser = this.config.username;
 		var myHivePassword = this.config.password;
@@ -31,12 +32,11 @@ module.exports = NodeHelper.create({
 		var sessionID;
 		
 		var body = {
-        sessions: [{
           username: myHiveUser,
           password: myHivePassword,
-          caller: 'WEB'
-				}]
-		};
+          devices: "false",
+		  products: "false"
+				};
 
 		request({
 			url: oUrl + myPostcode,
@@ -59,15 +59,18 @@ module.exports = NodeHelper.create({
 		});
 
 		request({
-			url: iUrl + "/auth/sessions",
-			headers: myHeaders,
+			url: lUrl + '/global/login',
+			//url: 'https://beekeeper.hivehome.com:443/1.0/global/login',
+			headers: { 'Content-Type': 'application/json' },
 			method: "POST",
-			body: JSON.stringify(body),
+			body: JSON.stringify(body),				
 		}, function (error, response, body) {
 			if (response && response.statusCode) {
 				if (!error && response.statusCode == 200) {
+					//self.sendSocketNotification("INITIAL", body);
+					console.log(response.statusCode);
 					var responseJson = JSON.parse(body);
-					sessionID = responseJson.sessions[0].sessionId;
+					sessionID = responseJson.token;
 				}
 				else if (response.statusCode == 400) {
 					self.sendSocketNotification("400_ERROR", "Authorisation error username / password missing or incorrect: " + response.statusCode + " Body: " + body);
@@ -77,16 +80,15 @@ module.exports = NodeHelper.create({
 					}
 				}
 			else {
-			self.sendSocketNotification("UNKNOWN_ERROR", "Unknown error within /auth/sessions has occurred: " + response + " Body: " + body);
-			}
+				self.sendSocketNotification("UNKNOWN_ERROR", "Unknown error within /auth/sessions has occurred: " + response.statusCode + " Body: " + body);
+				 }
+					
 			request({
-			url: iUrl + "/nodes",
+			url: iUrl + '/products',
+			//url: "https://beekeeper-uk.hivehome.com:443/1.0/products",
 			headers: {
-					'Content-Type': 'application/vnd.alertme.zoo-6.1+json',
-					'Accept': 'application/vnd.alertme.zoo-6.1+json',
-					'X-Omnia-Client': 'Hive Web Dashboard',
-					'cache-control': "no-cache",
-					'X-Omnia-Access-Token': sessionID,
+					'Content-Type': 'application/json',
+					'authorization': sessionID,
 					 },
 			method: "GET",
 			}, function (error, response, body) {
@@ -94,6 +96,32 @@ module.exports = NodeHelper.create({
 				if (response && response.statusCode) {
 					if (!error && response.statusCode == 200) {
 						self.sendSocketNotification("INSIDE", body);
+						var responseJson = JSON.parse(body);
+						}
+					else if (response.statusCode == 401) {
+						self.sendSocketNotification("401_ERROR", "Authorisation error username / password missing or incorrect: " + response.statusCode + " Body: " + body);
+						}
+					else {
+						self.sendSocketNotification("INSIDE_ERROR", "Error in devices request for Inside temperature with status code: " + response.statusCode + " Body: " + body);
+						}
+					}
+				else {
+				self.sendSocketNotification("UNKNOWN_ERROR", "Unknown error within /nodes has occurred: " + response + " Body: " + body);
+					}
+				})
+			request({
+			url: iUrl + '/devices',
+			//url: "https://beekeeper-uk.hivehome.com:443/1.0/devices",
+			headers: {
+					'Content-Type': 'application/json',
+					'authorization': sessionID,
+					 },
+			method: "GET",
+			}, function (error, response, body) {
+			//
+				if (response && response.statusCode) {
+					if (!error && response.statusCode == 200) {
+						self.sendSocketNotification("DEVICES", body);
 						var responseJson = JSON.parse(body);
 						}
 					else if (response.statusCode == 401) {
