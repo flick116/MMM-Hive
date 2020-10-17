@@ -41,6 +41,9 @@ Module.register('MMM-Hive',{
 		outsideUrl: 'http://weather-prod.bgchprod.info/weather?postcode=',
 		insideUrl: 'https://beekeeper-uk.hivehome.com:443/1.0',
 		loginUrl: 'https://beekeeper.hivehome.com:443/1.0',
+    loginUrlPlus: '/cognito/login',
+    insideUrlProducts: '/products',
+    insideUrlDevices: '/devices',
 		debug: false,
 		hiveHeaders: {
 						'Content-Type': 'application/json',

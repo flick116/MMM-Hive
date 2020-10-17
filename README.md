@@ -36,6 +36,9 @@ git clone https://github.com/flick116/MMM-Hive
 |`showNext`|No|Whether to display the Target Temperature (true) or not (false)<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
 |`outsideUrl`|No|Option in case British Gas change the Hive URL<br><br>**Type:** `string`|
 |`insideUrl`|No|Option in case British Gas change the Hive URL<br><br>**Type:** `string`|
+|`loginUrlPlus`|No|Option in case British Gas change the Hive URL, currently '/cognito/login'<br><br>**Type:** `string`|
+|`insideUrlProducts`|No|Option in case British Gas change the Hive URL, currently '/products'<br><br>**Type:** `string`|
+|`insideUrlDevices`|No|Option in case British Gas change the Hive URL, currently '/devices'<br><br>**Type:** `string`|
 |`temperatureSuffix` | No | Text to change the temperature suffix<br><br>**Type:** `string`<br>**Default value:** `°C`|
 |`insideText` | No | Option to change the default 'Inside:' text<br><br>**Type:** `string`|
 |`outsideText` | No | Option to change the default 'Outside:' text<br><br>**Type:** `string`|

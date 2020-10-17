@@ -25,6 +25,9 @@ module.exports = NodeHelper.create({
 		var oUrl = this.config.outsideUrl;
 		var iUrl = this.config.insideUrl;
 		var lUrl = this.config.loginUrl;
+    var lUrlPlus = this.config.loginUrlPlus;
+    var iUrlProducts = this.config.insideUrlProducts;
+    var iUrlDevices = this.config.insideUrlDevices;
 		var myPostcode = this.config.postcode;
 		var myHiveUser = this.config.username;
 		var myHivePassword = this.config.password;
@@ -59,7 +62,7 @@ module.exports = NodeHelper.create({
 		});
 
 		request({
-			url: lUrl + '/global/login',
+			url: lUrl + lUrlPlus,
 			//url: 'https://beekeeper.hivehome.com:443/1.0/global/login',
 			headers: { 'Content-Type': 'application/json' },
 			method: "POST",
@@ -84,7 +87,7 @@ module.exports = NodeHelper.create({
 				 }
 					
 			request({
-			url: iUrl + '/products',
+			url: iUrl + iUrlProducts,
 			//url: "https://beekeeper-uk.hivehome.com:443/1.0/products",
 			headers: {
 					'Content-Type': 'application/json',
@@ -110,7 +113,7 @@ module.exports = NodeHelper.create({
 					}
 				})
 			request({
-			url: iUrl + '/devices',
+			url: iUrl + iUrlDevices,
 			//url: "https://beekeeper-uk.hivehome.com:443/1.0/devices",
 			headers: {
 					'Content-Type': 'application/json',
