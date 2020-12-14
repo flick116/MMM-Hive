@@ -246,7 +246,7 @@ Module.register('MMM-Hive',{
 		if (this.batteryT >= 95) {
         battIcon.setAttribute("aria-hidden","true");
         battIcon.className = "fa fa-battery-full fa-rotate-270 xsmall dimmed";
-        battIcon.style.cssFloat="left";
+        battIcon.style.cssFloat="right";
         battIcon.style.verticalAlign = "top";
         temperatureRow.appendChild(battIcon);
 		}
@@ -254,26 +254,28 @@ Module.register('MMM-Hive',{
         battIcon.setAttribute("aria-hidden","true");
         battIcon.className = "fa fa-battery-empty fa-rotate-270 xsmall dimmed";
         battIcon.style.cssText="color:red;";
-        battIcon.style.cssFloat="left";
+        battIcon.style.cssFloat="right";
         battIcon.style.verticalAlign = "top";
         temperatureRow.appendChild(battIcon);
 		}
 		else if (this.batteryT <= 25) {
         battIcon.setAttribute("aria-hidden","true");
         battIcon.className = "fa fa-battery-quarter fa-rotate-270 xsmall dimmed";
+        battIcon.style.cssFloat="right";
+        battIcon.style.verticalAlign = "top";
         temperatureRow.appendChild(battIcon);
 		}
 		else if (this.batteryT <= 50) {
         battIcon.setAttribute("aria-hidden","true");
         battIcon.className = "fa fa-battery-half fa-rotate-270 xsmall dimmed";
-        battIcon.style.cssFloat="left";
+        battIcon.style.cssFloat="right";
         battIcon.style.verticalAlign = "top";
         temperatureRow.appendChild(battIcon);
 		}
 		else if (this.batteryT <= 94) {
         battIcon.setAttribute("aria-hidden","true");
         battIcon.className = "fa fa-battery-three-quarters fa-rotate-270 xsmall dimmed";
-        battIcon.style.cssFloat="left";
+        battIcon.style.cssFloat="right";
         battIcon.style.verticalAlign = "top";
         temperatureRow.appendChild(battIcon);
 		}
