@@ -34,6 +34,7 @@ git clone https://github.com/flick116/MMM-Hive
 |`updateInterval`|No|How often the temperature information is updated.<br><br>**Type:** `integer`<br>**Default value:** `10 * 60000`|
 |`initialLoadDelay`|No|The initial delay before loading (Milliseconds) <br><br>**Type:** `integer`<br>**Possible values:** `1000` - `5000` <br> **Default value:**  `0`|
 |`showNext`|No|Whether to display the Target Temperature (true) or not (false)<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
+|`showOutside`|No|Whether to display the Outside Temperature (true) or not (false)<br><br>**Type:** `bool`<br>**Possible values:** `true` or `false` <br> **Default value:** `true`|
 |`outsideUrl`|No|Option in case British Gas change the Hive URL<br><br>**Type:** `string`|
 |`insideUrl`|No|Option in case British Gas change the Hive URL<br><br>**Type:** `string`|
 |`loginUrlPlus`|No|Option in case British Gas change the Hive URL, currently '/cognito/login'<br><br>**Type:** `string`|
