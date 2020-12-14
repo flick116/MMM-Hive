@@ -64,7 +64,7 @@ module.exports = NodeHelper.create({
 		request({
 			url: lUrl + lUrlPlus,
 			//url: 'https://beekeeper.hivehome.com:443/1.0/global/login',
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json', 'User-Agent': 'HiveRNApp/10.16.2' },
 			method: "POST",
 			body: JSON.stringify(body),				
 		}, function (error, response, body) {
