@@ -56,7 +56,7 @@ export CognitoUserPoolUsers=eu-west-1_SamNfoWtf CognitoUserPoolClientWeb=3rl4i0a
 ```
 node /home/pi/node_modules/amazon-user-pool-srp-client/index.js > /home/pi/node_modules/amazon-user-pool-srp-client/HiveTokens.json
 ```
-If there are any errors relating to tokens, the the above step will need to be re-run.
+If there are any errors relating to tokens, then the above 'Final commands' steps will need to be re-run.
 
 ## Dependencies
 
