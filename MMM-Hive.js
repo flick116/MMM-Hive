@@ -28,7 +28,6 @@ Module.register('MMM-Hive',{
 		hwBoostOffText: 'Off',
 		boostRow: false,
 		showNext: true,
-    showOutside: true,
 		showHotWater: false,
 		showBattery: false,
 		batteryIcon: false,
@@ -40,12 +39,14 @@ Module.register('MMM-Hive',{
 		temperatureSuffix: '°C',
 		nodeName: 'heating',
 		outsideUrl: 'http://weather-prod.bgchprod.info/weather?postcode=',
-		insideUrl: 'https://beekeeper-uk.hivehome.com:443/1.0',
-		loginUrl: 'https://beekeeper.hivehome.com:443/1.0',
-    loginUrlPlus: '/cognito/login',
+		insideUrl: 'https://beekeeper-uk.hivehome.com/1.0',
+		loginUrl: 'https://beekeeper-uk.hivehome.com/1.0',
+    loginUrlPlus: '/cognito/refresh-token',
     insideUrlProducts: '/products',
     insideUrlDevices: '/devices',
 		debug: false,
+    token: '',
+    jsonLocation: '/home/pi/node_modules/amazon-user-pool-srp-client/HiveTokens.json',
 		hiveHeaders: {
 						'Content-Type': 'application/json',
 					  }
@@ -155,89 +156,76 @@ Module.register('MMM-Hive',{
 			}
         }
 		
+        // if (this.error) {
+            // information.innerHTML = "Error loading data";
+			// information.className = "light small";
+            // return information;
+        // }
+		
 		var table = document.createElement("table");
 		
 		//heating
 		var temperatureRow = document.createElement("tr");
-
-    if (this.config.showOutside == true) {
 		
 		var outsideIcon = document.createElement("td");
 		
 		if (this.outsideT >= this.config.highestTemp) {
         outsideIcon.setAttribute("aria-hidden","true");
-        outsideIcon.className = "fa fa-thermometer-full small dimmed";
-        outsideIcon.style.cssText="color:red;";
-        outsideIcon.style.cssFloat="left";
-        outsideIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(outsideIcon);
+		outsideIcon.className = "fa fa-thermometer-full small dimmed";
+		outsideIcon.style.cssText="color:red;"; 
+			temperatureRow.appendChild(outsideIcon);
 		}
 		else if (this.outsideT >= this.config.highTemp) {
         outsideIcon.setAttribute("aria-hidden","true");
-        outsideIcon.className = "fa fa-thermometer-three-quarters small dimmed";
-        outsideIcon.style.cssFloat="left";
-        outsideIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(outsideIcon);
+		outsideIcon.className = "fa fa-thermometer-three-quarters small dimmed";
+			temperatureRow.appendChild(outsideIcon);
 		}
 		else if (this.outsideT >= this.config.lowTemp) {
         outsideIcon.setAttribute("aria-hidden","true");
-        outsideIcon.className = "fa fa-thermometer-half small dimmed";
-        outsideIcon.style.cssFloat="left";
-        outsideIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(outsideIcon);
+		outsideIcon.className = "fa fa-thermometer-half small dimmed";
+			temperatureRow.appendChild(outsideIcon);
 		}
 		else if (this.outsideT >= this.config.lowestTemp) {
         outsideIcon.setAttribute("aria-hidden","true");
-        outsideIcon.className = "fa fa-thermometer-quarter small dimmed";
-        outsideIcon.style.cssFloat="left";
-        outsideIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(outsideIcon);
+		outsideIcon.className = "fa fa-thermometer-quarter small dimmed";
+			temperatureRow.appendChild(outsideIcon);
 		}
 		else if (this.outsideT < this.config.lowestTemp) {
         outsideIcon.setAttribute("aria-hidden","true");
-        outsideIcon.className = "fa fa-thermometer-empty small dimmed";
-        outsideIcon.style.cssFloat="left";
-        outsideIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(outsideIcon);
+		outsideIcon.className = "fa fa-thermometer-empty small dimmed";
+			temperatureRow.appendChild(outsideIcon);
 		}
-    
+        
 		var outsideCell = document.createElement("td");
 		outsideCell.innerHTML = this.config.outsideText + " " + this.outsideT + this.config.temperatureSuffix;
 		outsideCell.className = "small light";
 		outsideCell.style.cssText="color:white;";
-    outsideCell.style.cssFloat="left";
-    outsideCell.style.verticalAlign = "top";
 		temperatureRow.appendChild(outsideCell)
-    
-    var buffer = document.createElement("td");
-		buffer.innerHTML = " ";
+		
+		var buffer = document.createElement("td");
+		buffer.innerHTML = " "
 		temperatureRow.appendChild(buffer)
-		}
 		
 		var onOffIcon = document.createElement("td");
 		
+		//if (this.insideS == "OFF") {
 		if (this.insideT >= this.insideTarget) {
         onOffIcon.setAttribute("aria-hidden","true");
-        onOffIcon.className = this.config.insideIconSet + " small dimmed";
-        onOffIcon.style.cssFloat="left";
-        onOffIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(onOffIcon);
+		onOffIcon.className = this.config.insideIconSet + " small dimmed";
+			temperatureRow.appendChild(onOffIcon);
 		}
+		//else if (this.insideS == "ON") {
 		else if (this.insideT < this.insideTarget) {
         onOffIcon.setAttribute("aria-hidden","true");
-        onOffIcon.className = this.config.insideIconSet + " small";
-        onOffIcon.style.cssText="color:red;";
-        onOffIcon.style.cssFloat="left";
-        onOffIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(onOffIcon);
+		onOffIcon.className = this.config.insideIconSet + " small";
+		onOffIcon.style.cssText="color:red;"; 
+			temperatureRow.appendChild(onOffIcon);
 		}
 
 		var insideCell = document.createElement("td");
 		insideCell.innerHTML = this.config.insideText + " " + this.insideT + this.config.temperatureSuffix;
 		insideCell.className = "light small";
 		insideCell.style.cssText="color:white;";
-    insideCell.style.cssFloat="left";
-    insideCell.style.verticalAlign = "top";
 		temperatureRow.appendChild(insideCell);
 		
 		if (this.config.batteryIcon == true) {
@@ -245,39 +233,29 @@ Module.register('MMM-Hive',{
 		
 		if (this.batteryT >= 95) {
         battIcon.setAttribute("aria-hidden","true");
-        battIcon.className = "fa fa-battery-full fa-rotate-270 xsmall dimmed";
-        battIcon.style.cssFloat="right";
-        battIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(battIcon);
+		battIcon.className = "fa fa-battery-full fa-rotate-270 xsmall dimmed";
+			temperatureRow.appendChild(battIcon);
 		}
 		else if (this.batteryT <= 5) {
         battIcon.setAttribute("aria-hidden","true");
-        battIcon.className = "fa fa-battery-empty fa-rotate-270 xsmall dimmed";
-        battIcon.style.cssText="color:red;";
-        battIcon.style.cssFloat="right";
-        battIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(battIcon);
+		battIcon.className = "fa fa-battery-empty fa-rotate-270 xsmall dimmed";
+		battIcon.style.cssText="color:red;"; 
+			temperatureRow.appendChild(battIcon);
 		}
 		else if (this.batteryT <= 25) {
         battIcon.setAttribute("aria-hidden","true");
-        battIcon.className = "fa fa-battery-quarter fa-rotate-270 xsmall dimmed";
-        battIcon.style.cssFloat="right";
-        battIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(battIcon);
+		battIcon.className = "fa fa-battery-quarter fa-rotate-270 xsmall dimmed";
+			temperatureRow.appendChild(battIcon);
 		}
 		else if (this.batteryT <= 50) {
         battIcon.setAttribute("aria-hidden","true");
-        battIcon.className = "fa fa-battery-half fa-rotate-270 xsmall dimmed";
-        battIcon.style.cssFloat="right";
-        battIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(battIcon);
+		battIcon.className = "fa fa-battery-half fa-rotate-270 xsmall dimmed";
+			temperatureRow.appendChild(battIcon);
 		}
 		else if (this.batteryT <= 94) {
         battIcon.setAttribute("aria-hidden","true");
-        battIcon.className = "fa fa-battery-three-quarters fa-rotate-270 xsmall dimmed";
-        battIcon.style.cssFloat="right";
-        battIcon.style.verticalAlign = "top";
-        temperatureRow.appendChild(battIcon);
+		battIcon.className = "fa fa-battery-three-quarters fa-rotate-270 xsmall dimmed";
+			temperatureRow.appendChild(battIcon);
 		}
 		}
 		//
