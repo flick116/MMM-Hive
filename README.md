@@ -40,6 +40,7 @@ npm install amazon-user-pool-srp-client --save
 ```
 npm install axios --save
 ```
+```
 cd /home/pi/node_modules/amazon-user-pool-srp-client
 ```
 You will now need to copy the index.js from ~MagicMirror/modules/MMM-Hive/tokenGeneration to /home/pi/node_modules/amazon-user-pool-srp-client overwriting the existing file
