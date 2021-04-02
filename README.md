@@ -30,9 +30,16 @@ The following will only work when 2FA is disabled in the APP - once complete and
 The following commands are to be run in the terminal one after the other - the assumption is that you are using the pi user, if not then this will need to be changed below as appropriate:
 ```
 cd /home/pi
+```
+```
 sudo apt-get install npm
+```
+```
 npm install amazon-user-pool-srp-client --save
+```
+```
 npm install axios --save
+```
 cd /home/pi/node_modules/amazon-user-pool-srp-client
 ```
 You will now need to copy the index.js from ~MagicMirror/modules/MMM-Hive/tokenGeneration to /home/pi/node_modules/amazon-user-pool-srp-client overwriting the existing file
@@ -44,6 +51,8 @@ nano /home/pi/node_modules/amazon-user-pool-srp-client/index.js
 Final commands create the file that contains the Hive tokens that are used for logging in:
 ```
 export CognitoUserPoolUsers=eu-west-1_SamNfoWtf CognitoUserPoolClientWeb=3rl4i0ajrmtdm8sbre54p9dvd9
+```
+```
 node /home/pi/node_modules/amazon-user-pool-srp-client/index.js > /home/pi/node_modules/amazon-user-pool-srp-client/HiveTokens.json
 ```
 If there are any errors relating to tokens, the the above step will need to be re-run.
