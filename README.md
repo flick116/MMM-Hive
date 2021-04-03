@@ -40,9 +40,6 @@ npm install amazon-user-pool-srp-client --save
 ```
 npm install axios --save
 ```
-```
-cd /home/pi/node_modules/amazon-user-pool-srp-client
-```
 You will now need to copy the index.js from ~MagicMirror/modules/MMM-Hive/tokenGeneration to /home/pi/node_modules/amazon-user-pool-srp-client overwriting the existing file
 ```
 cd ~MagicMirror/modules/MMM-Hive/tokenGeneration
@@ -55,6 +52,9 @@ Edit index.js and add your Hive login/password credentials to the end of the fil
 nano /home/pi/node_modules/amazon-user-pool-srp-client/index.js
 ```
 Final commands create the file that contains the Hive tokens that are used for logging in:
+```
+cd /home/pi/node_modules/amazon-user-pool-srp-client
+```
 ```
 export CognitoUserPoolUsers=eu-west-1_SamNfoWtf CognitoUserPoolClientWeb=3rl4i0ajrmtdm8sbre54p9dvd9
 ```
