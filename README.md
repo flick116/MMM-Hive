@@ -44,7 +44,12 @@ npm install axios --save
 cd /home/pi/node_modules/amazon-user-pool-srp-client
 ```
 You will now need to copy the index.js from ~MagicMirror/modules/MMM-Hive/tokenGeneration to /home/pi/node_modules/amazon-user-pool-srp-client overwriting the existing file
-
+```
+cd ~MagicMirror/modules/MMM-Hive/tokenGeneration
+```
+```
+cp index.js /home/pi/node_modules/amazon-user-pool-srp-client/index.js
+```
 Edit index.js and add your Hive login/password credentials to the end of the file overwriting the existing xxxxx parts (login('xxxx@xxxxxx.com','xxxxxxxxx')):
 ```
 nano /home/pi/node_modules/amazon-user-pool-srp-client/index.js
